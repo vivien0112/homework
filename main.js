@@ -1,6 +1,9 @@
 const { app, BrowserWindow } = require("electron");
 let {PythonShell} = require('python-shell')
 
+const args = process.argv.slice(1);
+const serve = args.some(val => val === '--serve');
+
 function createWindow() {
   let window = new BrowserWindow({ 
     width: 800,
@@ -11,7 +14,19 @@ function createWindow() {
   });
 
   // and load the index.html of the app.
-  window.loadFile('index.html')
+  // window.loadFile('index.html')
+  if (serve) {
+    require('electron-reload')(__dirname, {
+      electron: require(`${__dirname}/node_modules/electron`)
+    });
+    window.loadURL('http://localhost:8081');
+  } else {
+    window.loadURL(url.format({
+      pathname: path.join(__dirname, 'build/es6-bundled/index.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
+  }
 
   // Open the DevTools.
   window.webContents.openDevTools()
