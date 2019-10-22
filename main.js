@@ -24,7 +24,7 @@ function createWindow() {
     window.loadURL('http://localhost:8081');
   } else {
     window.loadURL(url.format({
-      pathname: path.join(__dirname, 'build/es5-bundled/index.html'),
+      pathname: path.join(__dirname, 'build/es6-bundled/index.html'),
       protocol: 'file:',
       slashes: true
     }));
