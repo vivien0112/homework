@@ -1,2 +1,2 @@
 # electron-python-client
-fujen sample
+fujen sample python client GUI app
