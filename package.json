@@ -10,7 +10,10 @@
     "polymer:build": "polymer build",
     "postinstall": "electron-builder install-app-deps",
     "electron:serve": "wait-on http-get://localhost:8081/ && electron . --serve",
-    "electron:local": "npm run polymer:build && electron ."
+    "electron:local": "npm run polymer:build && electron .",
+    "electron:linux": "npm run polymer:build && electron-builder build --linux",
+    "electron:windows": "npm run polymer:build && electron-builder build --windows",
+    "electron:mac": "npm run polymer:build && electron-builder build --mac"
   },
   "keywords": [],
   "author": "",

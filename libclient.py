@@ -140,6 +140,7 @@ class Message:
         finally:
             # Delete reference to socket object for garbage collection
             self.sock = None
+            sys.stdout.flush()
 
     def queue_request(self):
         content = self.request["content"]

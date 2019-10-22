@@ -1,5 +1,7 @@
 const { app, BrowserWindow } = require("electron");
 let {PythonShell} = require('python-shell')
+let path = require('path');
+let url = require('url');
 
 const args = process.argv.slice(1);
 const serve = args.some(val => val === '--serve');
@@ -22,7 +24,7 @@ function createWindow() {
     window.loadURL('http://localhost:8081');
   } else {
     window.loadURL(url.format({
-      pathname: path.join(__dirname, 'build/es6-bundled/index.html'),
+      pathname: path.join(__dirname, 'build/es5-bundled/index.html'),
       protocol: 'file:',
       slashes: true
     }));

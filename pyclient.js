@@ -1,11 +1,12 @@
 import { LitElement, html, css } from "lit-element/lit-element.js";
+let { PythonShell } = require("python-shell");
 
 const style = css`
   .DoIt {
     color: white;
     font-size: 2em;
-    width: 40px;
-    height: 40px;
+    width: 140px;
+    height: 80px;
     padding: 0px;
     display: flex;
     justify-content: center;
@@ -30,6 +31,17 @@ const style = css`
   }
 `;
 export class PyClient extends LitElement {
+  /**
+   * Declare the properties that will be
+   * available in the binding system
+   */
+  static get properties() {
+    return {
+      action: { type: String },
+      value: { type: String },
+      result: { type: String }
+    };
+  }
   constructor() {
     super();
     this.action = "search";
@@ -47,29 +59,42 @@ export class PyClient extends LitElement {
     this.value = e.target.value;
   }
   doIt() {
-    console.log("action=" + action + " value=" + value);
+    let options = {
+      mode: "text",
+      pythonOptions: ["-u"], // get print results in real-time
+      args: ["127.0.0.1", "65432", this.action, this.value]
+    };
+    PythonShell.run("app-client.py", options, (err, results) => {
+      if (err) {
+        console.log("pyshell error");
+        console.log(err);
+      }
+      // results is an array consisting of messages collected during execution
+      console.log("results: %j", results);
+      this.result = results[3];
+    });
   }
   render() {
     return html`
-    <div>
-        <p>action</p>
-          <input
-            type="text"
-            .value=${this.action}
-            @input=${this.handleActionInput}
-          />
-          <p>value</p>
-          <input
-            type="text"
-            .value=${this.value}
-            @input=${this.handleValueInput}
-          />
-          <button
-            class="DoIt"
-            @click=${this.doIt}
-          >Do It</button>
-        </div>
-    <p>${this.result}</p>
-    `
+      <div>
+        <h2>${this.result}</h2>
+        <h2>action</h2>
+        <input
+          type="text"
+          .value=${this.action}
+          @input=${this.handleActionInput}
+        />
+        <h2>value</h2>
+        <input
+          type="text"
+          .value=${this.value}
+          @input=${this.handleValueInput}
+        />
+        <button class="DoIt" @click=${this.doIt}>Do It</button>
+      </div>
+    `;
   }
 }
+
+// Register the new element with the browser.
+customElements.define("py-client", PyClient);
